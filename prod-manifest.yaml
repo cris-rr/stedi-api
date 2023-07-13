@@ -1,4 +1,4 @@
-#© 2021 cris Murdock
+#© 2021 Sean Murdock
 
 apiVersion: apps/v1
 kind: Deployment
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: prod-stedi-cris
-          image: us-docker.pkg.dev/team5-cit262/cris-api/stedi-api:latest # This image needs to refer to the NEW Artifact registry repositorry
+          image: us-docker.pkg.dev/team5-cit262/cris-api/stedi-api:latest # IMAGE NEEDS TO BE ARTIFACT REGISTRY NEW REPOSITORY
           env:
             - name: REDIS_PASSWORD
               valueFrom:
@@ -24,14 +24,14 @@ spec:
                   name: redis-secrets-cris
                   key: REDIS_PASS
             - name: REDIS_HOST
-              value: "redis-stedi-cris"
+              value: 'redis-stedi-cris'
             - name: REDIS_PORT
-              value: "6379"
+              value: '6379'
             - name: REDIS_DB
-              value: "0"
+              value: '0'
             - name: KAFKA_BROKER
-              value: "localhost:9092"
-              name: TWILIO_AUTH_TOKEN
+              value: 'localhost:9092'
+            - name: TWILIO_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: cris-twilio-dev
@@ -40,11 +40,11 @@ spec:
             - containerPort: 443
           resources:
             limits:
-              cpu: ".5"
-              memory: "500Mi"
+              cpu: '.5'
+              memory: '500Mi'
             requests:
-              cpu: ".25"
-              memory: "250Mi"
+              cpu: '.25'
+              memory: '250Mi'
           livenessProbe:
             httpGet:
               path: /
@@ -74,15 +74,15 @@ metadata:
     # kubernetes.io/ingress.allow-http: "false"
 spec:
   rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: prod-stedi-cris-nodeport # This needs to match line 53
-            port:
-              number: 80
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prod-stedi-cris-nodeport # This needs to match line 53
+                port:
+                  number: 80
 ---
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
@@ -91,4 +91,4 @@ metadata:
 spec:
   domains:
     - cris.cit262.com # This is a DNS record that has not been created yet - we need to create that first
-    
+
